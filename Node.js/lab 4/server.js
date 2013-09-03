@@ -1,17 +1,12 @@
 var http = require("http");
 var url = require("url");
 
-function startserver(route, handle) {
+function start(route, handle) {
 	function onRequest(request, response) {
-		console.log("Request received");
-		
 		var pathname = url.parse(request.url).pathname;
 		console.log("Request for " + pathname + " received");
 		
-		response.writeHead(200, {"Content-Type": "text/plain"});
-		var content = route(handle, pathname);
-		response.write(content);
-		response.end();
+		route(handle, pathname, response, request);
 	}
 
 	http.createServer(onRequest).listen(3000);
@@ -19,4 +14,4 @@ function startserver(route, handle) {
 	console.log("Server has started");
 }
 
-exports.start = startserver;
+exports.start = start;
